@@ -256,6 +256,12 @@ namespace NpgsqlTests
             {
                 System.Threading.Thread.CurrentThread.CurrentCulture = oldCulture;
             }
+
+            var interval12345 = new NpgsqlTypes.NpgsqlInterval(1, 2, 3, 4, 5);
+            var intervalFromTimespan12345 = new NpgsqlTypes.NpgsqlInterval(new TimeSpan(1, 2, 3, 4, 5));
+            Assert.AreEqual(intervalFromTimespan12345.ToString(), interval12345.ToString());
+            
+
         }
 
         [Test]
