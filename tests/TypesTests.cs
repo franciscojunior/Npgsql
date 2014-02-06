@@ -261,6 +261,8 @@ namespace NpgsqlTests
 
             Assert.AreEqual("1 day 02:03:04.005", new NpgsqlInterval(new TimeSpan(1, 2, 3, 4, 5).Ticks).ToString());
 
+            Assert.AreEqual("1 mon 1 day 02:03:04.005", new NpgsqlInterval(new TimeSpan(31, 2, 3, 4, 5)).ToString());
+
         }
 
         [Test]
