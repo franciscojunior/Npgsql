@@ -149,10 +149,9 @@ namespace NpgsqlTypes
         /// </summary>
         /// <param name="ticks">A time period expressed in 100ns units.</param>
         public NpgsqlInterval(long ticks)
+            : this(new TimeSpan(ticks))
         {
-            _months = 0;
-            _days = 0;
-            _ticks = ticks;
+            
         }
 
         /// <summary>
@@ -160,8 +159,10 @@ namespace NpgsqlTypes
         /// </summary>
         /// <param name="timespan">A time period expressed in a <see cref="TimeSpan"/></param>
         public NpgsqlInterval(TimeSpan timespan)
-            : this(timespan.Ticks)
         {
+            _months = timespan.Days / DaysPerMonth;
+            _days = timespan.Days % DaysPerMonth;
+            _ticks = timespan.Subtract(TimeSpan.FromDays(timespan.Days)).Ticks;
         }
 
         /// <summary>
