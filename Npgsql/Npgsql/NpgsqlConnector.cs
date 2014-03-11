@@ -427,7 +427,7 @@ namespace Npgsql
 
         internal void ReleaseWithDiscard()
         {
-            NpgsqlCommand.ExecuteBlind(this, NpgsqlQuery.DiscardAll, 60);
+            NpgsqlCommand.ExecuteBlind(this, NpgsqlQuery.DiscardAll);
 
             // The initial connection parameters will be restored via IsValid() when get connector from pool later 
         }
@@ -828,7 +828,7 @@ namespace Npgsql
 
             initQueries = sbInitQueries.ToString();
 
-            NpgsqlCommand.ExecuteBlind(this, initQueries, 60);
+            NpgsqlCommand.ExecuteBlind(this, initQueries);
 
             // Make a shallow copy of the type mapping that the connector will own.
             // It is possible that the connector may add types to its private
