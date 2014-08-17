@@ -491,5 +491,45 @@ namespace NpgsqlTests
             DataTable metaDataCollections = Conn.GetSchema(System.Data.Common.DbMetaDataCollectionNames.ReservedWords);
             Assert.IsTrue(metaDataCollections.Rows.Count > 0, "There should be one or more ReservedWords returned.");
         }
+
+        [Test]
+        public void StatementTimeoutNotReset()
+        {
+            // Created for PR #323
+            var conn = new NpgsqlConnection(ConnectionString + ";MinPoolSize=1;MaxPoolSize=1");
+
+
+            conn.Open();
+
+            try {
+                var cmd = new NpgsqlCommand("show statement_timeout", conn);
+
+                var statementTimeoutOriginal = cmd.ExecuteScalar();
+
+
+                cmd.CommandText = "set statement_timeout=444";
+                cmd.ExecuteNonQuery();
+
+                conn.Close();
+
+                // Reopen the connection from the pool.
+                // As the pool is limited to one connection, this will be the same connection as before.
+                conn.Open();
+
+                cmd = new NpgsqlCommand("show statement_timeout", conn);
+
+                var statementTimeoutModified = cmd.ExecuteScalar();
+
+                Assert.AreEqual(statementTimeoutOriginal, statementTimeoutModified);
+            } finally {
+                conn.Close();
+            }
+
+
+
+
+
+
+        }
     }
 }
